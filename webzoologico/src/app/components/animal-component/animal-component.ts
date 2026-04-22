@@ -16,6 +16,7 @@ export class AnimalComponent {
  getAllAnimals() {
    this.animalService.getAllAnimalsData().subscribe((data: {}) => {
    this.animalList=data;
+   console.log(this.animalList)
   });
  }
  ngOnInit() {
