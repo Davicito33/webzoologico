@@ -5,6 +5,7 @@
     "packageManager": "npm"
   },
   "newProjectRoot": "projects",
+
   "projects": {
     "webzoologico": {
       "projectType": "application",
@@ -12,22 +13,34 @@
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
+
       "architect": {
         "build": {
           "builder": "@angular/build:application",
+
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
               }
             ],
+
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
+              "node_modules/ngx-toastr/toastr.css"
+            ],
+
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
             ]
           },
+
           "configurations": {
             "production": {
               "budgets": [
@@ -44,26 +57,33 @@
               ],
               "outputHashing": "all"
             },
+
             "development": {
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
             }
           },
+
           "defaultConfiguration": "production"
         },
+
         "serve": {
           "builder": "@angular/build:dev-server",
+
           "configurations": {
             "production": {
               "buildTarget": "webzoologico:build:production"
             },
+
             "development": {
               "buildTarget": "webzoologico:build:development"
             }
           },
+
           "defaultConfiguration": "development"
         },
+
         "test": {
           "builder": "@angular/build:unit-test"
         }
