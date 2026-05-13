@@ -15,7 +15,8 @@ import {
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CommonModule
   ],
   templateUrl: './animal-component.html',
   styleUrl: './animal-component.css',
@@ -32,8 +33,10 @@ export class AnimalComponent {
     private formBuilder: FormBuilder,
     private router: Router,
     private toastr: ToastrService
-  ) {}
 
+  ) { }
+  idAnimal: any;
+  editableAnimal: boolean = false;
   ngOnInit() {
     this.animalForm = this.formBuilder.group({
       nombre: '',
@@ -61,9 +64,9 @@ export class AnimalComponent {
       'Clic aquí para actualizar la lista',
       messageText
     )
-    .onTap
-    .pipe(take(1))
-    .subscribe(() => window.location.reload());
+      .onTap
+      .pipe(take(1))
+      .subscribe(() => window.location.reload());
   }
 
   newAnimalEntry() {
@@ -74,4 +77,44 @@ export class AnimalComponent {
         });
     });
   }
+  updateAnimalEntry() {
+    //Removiendo valores vacios del formulario de actualización
+    for (let key in this.animalForm.value) {
+      if (this.animalForm.value[key] === '') {
+        this.animalForm.removeControl(key);
+      }
+    }
+    this.animalService.updateAnimal(this.idAnimal, this.animalForm.value).subscribe(
+      () => {
+        //Enviando mensaje de confirmación
+        this.newMessage("Animal editado");
+      }
+    );
+  }
+  toggleEditAnimal(id: any) {
+    this.idAnimal = id;
+    console.log(this.idAnimal)
+    this.animalService.getOneAnimal(id).subscribe(
+      data => {
+        this.animalForm.setValue({
+          nombre: data.nombre,
+          edad: data.edad,
+          tipo: data.tipo,
+        });
+      }
+    );
+    this.editableAnimal = !this.editableAnimal;
+  }
+  deleteAnimalEntry(id: any) {
+    console.log(id)
+    this.animalService.deleteAnimal(id).subscribe(
+      () => {
+        //Enviando mensaje de confirmación
+        this.newMessage("Animal eliminado");
+      }
+    );
+  }
+
+  
+
 }
